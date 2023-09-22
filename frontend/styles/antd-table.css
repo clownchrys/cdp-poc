@@ -1,0 +1,4 @@
+.ant-table-tbody > tr.ant-table-row:hover > td
+{
+    background: #1677ff11 !important;
+}
