@@ -71,10 +71,10 @@ export default function Index() {
             const countReq: APIQueryToAthena.RequestType = {
                 query: state2query(stateToQuerify, "\n", "count(pr_mem_id) AS cnt"),
             }
+            // console.log(countReq.query)
 
             try {
                 const countResp: APIQueryToAthena.ResponseType = ( await axios.post("/api/query_to_athena", countReq) ).data
-                // console.log(countResp.query)
 
                 const count = countResp.result.Items[0].cnt
                 const updated = new Date().toLocaleString()
@@ -92,13 +92,11 @@ export default function Index() {
         const memReq: APISaveToMongo.RequestType = {
             query: state2query(stateToQuerify, " ", "pr_mem_id"),
         }
+        // console.log(memReq.query)
 
         try {
             const memResp: APISaveToMongo.ResponseType = ( await axios.post("/api/save_to_mongo", memReq) ).data
             setCurrentSize({ ...currentSize, queryId: memResp.result })
-            document.body.scroll({
-                top: -100
-            })
 
         } catch (reason) {
             alert("쿼리를 저장하는 도중 오류가 발생했습니다. 관리자에게 문의해주세요.")

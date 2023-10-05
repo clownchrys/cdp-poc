@@ -10,7 +10,7 @@ export const JK_CDP_TABLE_NAME_MAPPER: {[keys in SourceTable]: string} = {
     "jk_dev_cdp_poc_db.cdp_base_table_ik_0830": "기본 정보",
     "jk_dev_cdp_poc_db.cdp_activity_table_ik_0830": "활동 정보",
     "jk_dev_cdp_poc_db.cdp_working_table_ik_0830": "근무 정보",
-    "jk_dev_cdp_poc_db.cdp_marketing_table_ik_0830": "마케팅 동의 정보"
+    "jk_dev_cdp_poc_db.cdp_marketing_agree_table_ik_0830": "마케팅 동의 정보"
 }
 
 export const JK_CDP_TABLE_SPEC: TableAttributeSpec = {
@@ -266,7 +266,7 @@ export const JK_CDP_TABLE_SPEC: TableAttributeSpec = {
         },
     ],
 
-    "jk_dev_cdp_poc_db.cdp_marketing_table_ik_0830": [
+    "jk_dev_cdp_poc_db.cdp_marketing_agree_table_ik_0830": [
         {
             label: "이메일 공개여부",
             value: "email_stat",

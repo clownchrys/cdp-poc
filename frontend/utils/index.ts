@@ -49,7 +49,9 @@ export function state2query(
       // 1. AGG 테이블
       if (tableName == "jk_dev_cdp_poc_db.cdp_activity_table_ik_0830") {
         const innerWhereCond = queryStringList.filter((queryString) => queryString.startsWith("dt")).join(" AND ")
-        fromTable = `(SELECT pr_mem_id, sum(gno_view_cnt) AS gno_view_cnt, sum(apply_cnt) AS apply_cnt, sum(scrap_cnt) AS scrap_cnt FROM ${tableName} WHERE ${innerWhereCond} GROUP BY 1)`
+        fromTable = (!_.isEmpty(innerWhereCond))
+          ?  `(SELECT pr_mem_id, sum(gno_view_cnt) AS gno_view_cnt, sum(apply_cnt) AS apply_cnt, sum(scrap_cnt) AS scrap_cnt FROM ${tableName} WHERE ${innerWhereCond} GROUP BY 1)`
+          :  `(SELECT pr_mem_id, sum(gno_view_cnt) AS gno_view_cnt, sum(apply_cnt) AS apply_cnt, sum(scrap_cnt) AS scrap_cnt FROM ${tableName} GROUP BY 1)`
         whereCond = queryStringList.filter((queryString) => !queryString.startsWith("dt")).join(" AND ")
       }
 

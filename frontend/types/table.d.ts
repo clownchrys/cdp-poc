@@ -4,7 +4,7 @@ export type SourceTable =
     "jk_dev_cdp_poc_db.cdp_base_table_ik_0830" |
     "jk_dev_cdp_poc_db.cdp_working_table_ik_0830" |
     "jk_dev_cdp_poc_db.cdp_activity_table_ik_0830" |
-    "jk_dev_cdp_poc_db.cdp_marketing_table_ik_0830"
+    "jk_dev_cdp_poc_db.cdp_marketing_agree_table_ik_0830"
 
 // AddNew Cascader Types
 export type CascaderColumnType = {

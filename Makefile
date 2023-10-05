@@ -5,7 +5,7 @@ repo_uri := ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/jk-dev-ecr-repo-cd
 login:
 	@aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${repo_uri}
 
-push:
+push: destination login
 	@docker build -t cdp-poc:frontend ./frontend
 	@docker tag cdp-poc:frontend ${repo_uri}:frontend
 	@docker push ${repo_uri}:frontend
