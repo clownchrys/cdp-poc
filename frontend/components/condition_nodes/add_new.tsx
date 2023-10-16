@@ -1,6 +1,5 @@
 import {
     useDispatch,
-    // useSelector,
 } from "react-redux"
 import { CascaderProps, Cascader } from "antd"
 import { SingleValueType } from "rc-cascader/lib/Cascader"
@@ -14,7 +13,6 @@ import { DefaultOptionType } from "antd/es/cascader"
 export function AddNew({table, groupId}: AddNewNodeComponentProps)
 {
     const dispatch = useDispatch()
-    // const baseNodeState = useSelector((state: RootState) => state.node)
 
     // 테이블 별 NodeType 정의
     const options = JK_CDP_TABLE_SPEC[table]

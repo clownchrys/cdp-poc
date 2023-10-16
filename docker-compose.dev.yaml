@@ -9,9 +9,10 @@ services:
     image: cdp-poc:frontend
     build:
       context: frontend
-      dockerfile: Dockerfile
-    working_dir: /app
-    command: yarn dev
+      dockerfile: dockerfile
+      args:
+        BUILD_ENV: dev
+    command: [ "yarn", "dev" ]
     volumes:
       - ./frontend:/app:rw
     ports:
@@ -26,9 +27,16 @@ services:
     image: cdp-poc:streamlit
     build:
       context: streamlit
-      dockerfile: Dockerfile
-    working_dir: /app
-    command: streamlit run cdp_controller.py --server.allowRunOnSave true --logger.enableRich true
+      dockerfile: dockerfile
+      args:
+        BUILD_ENV: dev
+    command: [
+      "streamlit",
+      "run",
+      "cdp_controller.py",
+      "--server.allowRunOnSave", "true",
+      "--logger.enableRich", "true",
+    ]
     volumes:
       - ./streamlit:/app:rw
       - ./streamlit/.streamlit:/root/.streamlit:rw
@@ -44,7 +52,7 @@ services:
     image: cdp-poc:mongo
     build:
       context: mongo
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin

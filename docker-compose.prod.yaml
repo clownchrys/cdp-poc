@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+
+  # main ui web service
+  frontend:
+    container_name: frontend
+    hostname: frontend
+    image: cdp-poc:frontend
+    build:
+      context: frontend
+      dockerfile: dockerfile
+      args:
+        BUILD_ENV: prod
+    command: ["yarn", "start"]
+    # volumes:
+    #   - ./frontend:/app:rw
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+
+  # dashboard web service to visualize
+  streamlit:
+    container_name: streamlit
+    hostname: streamlit
+    image: cdp-poc:streamlit
+    build:
+      context: streamlit
+      dockerfile: dockerfile
+      args:
+        BUILD_ENV: prod
+    command: [
+      "streamlit",
+      "run",
+      "cdp_controller.py",
+      "--server.allowRunOnSave", "true",
+      "--logger.enableRich", "true",
+    ]
+    # volumes:
+    #   - ./streamlit:/app:rw
+    #   - ./streamlit/.streamlit:/root/.streamlit:rw
+    ports:
+      - "8501:8501"
+    depends_on:
+      - mongo
+
+  # query store
+  mongo:
+    container_name: mongo
+    hostname: mongo
+    image: cdp-poc:mongo
+    build:
+      context: mongo
+      dockerfile: dockerfile
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    expose:
+      - 27017
+    restart: always
