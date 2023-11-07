@@ -24,6 +24,9 @@ RUN pip install \
 FROM env_stage as dev
 # Use volume, instead of copy source code
 
+FROM env_stage as stag
+COPY . .
+
 FROM env_stage as prod
 COPY . .
 

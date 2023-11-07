@@ -7,14 +7,14 @@ import StringCompare from "@/components/condition_nodes/str_compare";
 import StringRange from "@/components/condition_nodes/str_range";
 
 export const JK_CDP_TABLE_NAME_MAPPER: {[keys in SourceTable]: string} = {
-    "jk_dev_cdp_poc_db.cdp_base_table_ik_0830": "기본 정보",
-    "jk_dev_cdp_poc_db.cdp_activity_table_ik_0830": "활동 정보",
-    "jk_dev_cdp_poc_db.cdp_working_table_ik_0830": "근무 정보",
-    "jk_dev_cdp_poc_db.cdp_marketing_agree_table_ik_0830": "마케팅 동의 정보"
+    "jk_dev_cdp_poc_db.cdp_jk_base_table": "기본 정보",
+    "jk_dev_cdp_poc_db.cdp_jk_activity_table": "활동 정보",
+    "jk_dev_cdp_poc_db.cdp_jk_working_table": "근무 정보",
+    "jk_dev_cdp_poc_db.cdp_jk_marketing_agree_table": "마케팅 동의 정보"
 }
 
 export const JK_CDP_TABLE_SPEC: TableAttributeSpec = {
-    "jk_dev_cdp_poc_db.cdp_base_table_ik_0830": [
+    "jk_dev_cdp_poc_db.cdp_jk_base_table": [
         {
             label: "경력(연)",
             value: "total_career_year",
@@ -132,7 +132,7 @@ export const JK_CDP_TABLE_SPEC: TableAttributeSpec = {
         },
     ],
 
-    "jk_dev_cdp_poc_db.cdp_activity_table_ik_0830": [
+    "jk_dev_cdp_poc_db.cdp_jk_activity_table": [
         {
             label: "일별 날짜",
             value: "dt",
@@ -167,7 +167,7 @@ export const JK_CDP_TABLE_SPEC: TableAttributeSpec = {
         },
     ],
 
-    "jk_dev_cdp_poc_db.cdp_working_table_ik_0830": [
+    "jk_dev_cdp_poc_db.cdp_jk_working_table": [
         {
             label: "경력최근순서",
             value: "ordno",
@@ -266,7 +266,7 @@ export const JK_CDP_TABLE_SPEC: TableAttributeSpec = {
         },
     ],
 
-    "jk_dev_cdp_poc_db.cdp_marketing_agree_table_ik_0830": [
+    "jk_dev_cdp_poc_db.cdp_jk_marketing_agree_table": [
         {
             label: "이메일 공개여부",
             value: "email_stat",
@@ -332,7 +332,7 @@ export const JK_CDP_TABLE_SPEC: TableAttributeSpec = {
         },
         {
             label: "인사담당자 이메일 알림통 발송여부",
-            value: "hr_event_stat",
+            value: "hr_email_stat",
             children: [
                 ValuesIn.getMeta({ options: [0, 1] }),
             ]
@@ -346,7 +346,7 @@ export const JK_CDP_TABLE_SPEC: TableAttributeSpec = {
         },
         {
             label: "실시간 공채소식 알림여부",
-            value: "realtime_gi_onfo_stat",
+            value: "realtime_gi_info_stat",
             children: [
                 ValuesIn.getMeta({ options: [0, 1] }),
             ]

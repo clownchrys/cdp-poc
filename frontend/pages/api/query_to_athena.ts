@@ -29,8 +29,7 @@ export default async function handler(
   aws.config.update({
     region: process.env.REGION,
     accessKeyId: process.env.ACCESS_KEY,
-    secretAccessKey: process.env.SECRET_KEY,
-    correctClockSkew: true,
+    secretAccessKey: process.env.SECRET_KEY, correctClockSkew: true,
     apiVersion: "latest",
   })
 
@@ -41,12 +40,15 @@ export default async function handler(
   })
 
   // on processing
-  // const rowCount: number = Math.floor(Math.random() * 10000) // TODO: impl
-  const queryResult = await athenaExpress.query(query)
+  let result: ResponseType["result"]
+  let success: boolean = true;
 
-  // result
-  res.status(200).json({
-    query,
-    result: queryResult,
-  })
+  try {
+    result = await athenaExpress.query(query)
+  } catch (exception) {
+    success = false
+    result = (exception as Error).toString()
+  }
+
+  res.status(success ? 200 : 400).json({query, result})
 }

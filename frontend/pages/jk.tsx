@@ -3,7 +3,7 @@
 import _ from "lodash"
 import { CSSProperties, useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import axios, { AxiosResponse } from "axios"
+import axios, { AxiosError, AxiosResponse } from "axios"
 import { Button, ButtonProps, Card, Col, Divider, Layout, Row, Spin, Statistic, Table } from "antd"
 import { ColumnsType } from "antd/es/table"
 import CountUp from "react-countup"
@@ -50,7 +50,7 @@ export default function JKPage() {
         setTotalSize({ ...totalSize, loading: true })
 
         const queryReq: APIQueryToAthena.RequestType = {
-            query: "SELECT count(1) AS cnt FROM jk_dev_cdp_poc_db.cdp_base_table_ik_0830"
+            query: "SELECT count(1) AS cnt FROM jk_dev_cdp_poc_db.cdp_jk_base_table"
         }
 
         axios.post("/api/query_to_athena", queryReq)
@@ -64,7 +64,11 @@ export default function JKPage() {
         })
         .catch((reason) => {
             // alert(reason)
-            console.log({ reason, error: "query failed on totalSize" })
+
+            const location = "TotalSize" 
+            const error = reason as AxiosError
+            console.log({ error, location })
+
             setTotalSize({ ...currentSize, loading: false, queryId: undefined })
         })
     }, [])
@@ -88,7 +92,11 @@ export default function JKPage() {
 
             } catch (reason) {
                 alert("쿼리를 실행하는 도중 오류가 발생했습니다. 관리자에게 문의해주세요.")
-                console.log({ reason, error: "query failed on currentSize" })
+
+                const location = "CurrentSize" 
+                const error = reason as AxiosError
+                console.log({ error, msg: location })
+
                 setCurrentSize({ ...currentSize, loading: false, queryId: undefined })
             }
         }
@@ -102,7 +110,11 @@ export default function JKPage() {
 
         try {
             const memResp: APISaveToMongo.ResponseType = ( await axios.post("/api/save_to_mongo", memReq) ).data
-            setCurrentSize({ ...currentSize, queryId: memResp.result })
+            const streamlitURL = `${STREAMLIT_URI}?query_id=${memResp.result}`
+
+            console.log(`Streamlit: ${streamlitURL}`)
+            window.open(streamlitURL, "_blank")
+            // setCurrentSize({ ...currentSize, queryId: memResp.result }) // due to unsafe cert
 
         } catch (reason) {
             alert("쿼리를 저장하는 도중 오류가 발생했습니다. 관리자에게 문의해주세요.")
@@ -142,6 +154,8 @@ export default function JKPage() {
         marginTop: 30,
         marginBottom: 30,
     }
+
+    // process.env.NODE_ENV
 
     return (
         <Layout style={{ backgroundColor: "transparent", height: "100%" }}>
@@ -215,7 +229,7 @@ export default function JKPage() {
                 </Col>
             </Row>
 
-            {/* 타겟 분석 완료시 */}
+            {/* 타겟 분석 완료시 (maybe deprecated? due to unsafe cert) */}
             {
                 ! _.isUndefined(currentSize.queryId)
                 && <IframeResizer

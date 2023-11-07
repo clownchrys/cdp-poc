@@ -9,7 +9,8 @@ import { NodeWrapperRemovable } from "."
 import { actions as NodeActions, SetNodePayload } from "@/reducers/node"
 
 const KST_TIMEZONE = 9 * 60 * 60 * 1000
-const DATE_FORMAT = "YYYY/MM/DD"
+const DATE_DELIMITER = "-"
+const DATE_FORMAT = `YYYY${DATE_DELIMITER}MM${DATE_DELIMITER}DD`
 
 export default function DateRange({
     table,
@@ -19,12 +20,12 @@ export default function DateRange({
     colLabel
 }: NodeComponentProps)
 {
-    const nodeState = useSelector((state: RootState) => state.node)
+    // const nodeState = useSelector((state: RootState) => state.node)
     const dispatch = useDispatch()
 
     const now: string = new Date(Date.now() + KST_TIMEZONE)
         .toISOString()
-        .replaceAll("-", "/")
+        .replaceAll("-", DATE_DELIMITER)
         .split("T")[0]
     const [value1, setValue1] = useState(now)
     const [value2, setValue2] = useState(now)
@@ -37,7 +38,7 @@ export default function DateRange({
             nodeSpec: {
                 component: DateRange,
                 props: {table, groupId, nodeId, colName, colLabel},
-                queryString: `${colName} BETWEEN ${value1} AND ${value2}`,
+                queryString: `${colName} BETWEEN DATE '${value1}' AND DATE '${value2}'`,
             }
         }
         dispatch(NodeActions.setNode(payload))

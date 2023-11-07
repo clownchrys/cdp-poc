@@ -25,10 +25,18 @@ export default async function handler(
   // on processing
   const db = client.db(process.env.MONGO_DB_NAME || UNKNOWN)
   const collection = db.collection(process.env.MONGO_COLLECTION_NAME || UNKNOWN)
-  const result = await collection.insertOne({ query })
+
+  let success: boolean = true
+  let result: ResponseType["result"]
+
+  try {
+    const insertResult = await collection.insertOne({ query })
+    result = insertResult.insertedId.toString()
+  } catch (exception) {
+    success = false
+    result = (exception as Error).toString()
+  }
 
   // result
-  res.status(200).json({
-    result: result.insertedId.toString(),
-  })
+  res.status(success ? 200 : 400).json({result})
 }

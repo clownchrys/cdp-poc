@@ -7,6 +7,7 @@ import { CascaderComponentType } from "@/types/table"
 import { actions as NodeActions, SetNodePayload } from "@/reducers/node"
 import { NodeWrapperRemovable } from "."
 import _ from "lodash"
+import { stringFormat } from "@/utils"
 
 export default function NumberCompare({
     table,
@@ -17,15 +18,15 @@ export default function NumberCompare({
 }: NodeComponentProps)
 {
     const operatorList = [
-        {label: "와 같음", value: "="},
-        {label: "와 같지 않음", value: "!="},
-        {label: "보다 큼", value: ">"},
-        {label: "보다 크거나 같음", value: ">="},
-        {label: "보다 작음", value: "<"},
-        {label: "보다 작거나 같음", value: "<="},
+        {label: "와 같음", value: "= {0}"},
+        {label: "와 같지 않음", value: "!= {0}"},
+        {label: "보다 큼", value: "> {0}"},
+        {label: "보다 크거나 같음", value: ">= {0}"},
+        {label: "보다 작음", value: "< {0}"},
+        {label: "보다 작거나 같음", value: "<= {0}"},
     ]
 
-    const nodeState = useSelector((state: RootState) => state.node)
+    // const nodeState = useSelector((state: RootState) => state.node)
     const dispatch = useDispatch()
 
     const [operator, setOperator] = useState(operatorList[0]["value"])
@@ -39,7 +40,7 @@ export default function NumberCompare({
             nodeSpec: {
                 component: NumberCompare,
                 props: {table, groupId, nodeId, colName, colLabel},
-                queryString: `${colName} ${operator} ${value1}`,
+                queryString: `${colName} ${stringFormat(operator, value1)}`,
             }
         }
         dispatch(NodeActions.setNode(payload))

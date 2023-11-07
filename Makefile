@@ -7,11 +7,31 @@ containers := frontend streamlit mongo
 docker-login:
 	@aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${repo_uri}
 
-ecr-push: docker-login ecr-destination
+# ecr-push: docker-login ecr-destination
+# 	@$(foreach container, ${containers}, \
+# 		docker build -t cdp-poc:${container} --build-arg BUILD_ENV=prod ./${container} && \
+# 		docker tag cdp-poc:${container} ${repo_uri}:${container} && \
+# 		docker push ${repo_uri}:${container}; \
+# 	)
+
+ecr-push-prod: docker-login ecr-destination
 	@$(foreach container, ${containers}, \
-		docker build -t cdp-poc:${container} --build-arg BUILD_ENV=prod ./${container} && \
-		docker tag cdp-poc:${container} ${repo_uri}:${container} && \
-		docker push ${repo_uri}:${container}; \
+		docker build \
+			--tag ${repo_uri}:${container}-prod \
+			--build-arg BUILD_ENV=prod \
+			--platform linux/amd64 \
+			--push \
+			./${container}; \
+	)
+
+ecr-push-stag: docker-login ecr-destination
+	@$(foreach container, ${containers}, \
+		docker build \
+			--tag ${repo_uri}:${container}-stag \
+			--build-arg BUILD_ENV=stag \
+			--platform linux/amd64 \
+			--push \
+			./${container}; \
 	)
 
 ecr-destination:

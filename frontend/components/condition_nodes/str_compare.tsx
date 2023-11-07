@@ -1,12 +1,14 @@
+import _ from "lodash"
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { SelectProps, Row, InputNumber, Select, Input } from "antd"
 import { RootState } from "@/reducers"
 import { NodeComponentProps } from "@/types/node"
 import { CascaderComponentType } from "@/types/table"
+import { stringFormat } from "@/utils"
 import { actions as NodeActions, SetNodePayload } from "@/reducers/node"
 import { NodeWrapperRemovable } from "."
-import _ from "lodash"
+
 
 export default function StringCompare({
     table,
@@ -17,12 +19,16 @@ export default function StringCompare({
 }: NodeComponentProps)
 {
     const operatorList = [
-        {label: "와 같음", value: "="},
-        {label: "를 포함함 (LIKE)", value: "LIKE"},
-        {label: "를 포함하지 않음 (NOT LIKE)", value: "NOT LIKE"},
+        {label: "와 같음", value: "= '{0}'"},
+        {label: "를 포함함", value: "LIKE '%{0}%'"},
+        {label: "를 포함하지 않음", value: "NOT LIKE '%{0}%'"},
+        {label: "로 시작함", value: "LIKE '{0}%'"},
+        {label: "로 시작하지 않음", value: "NOT LIKE '{0}%'"},
+        {label: "로 끝남", value: "LIKE '%{0}'"},
+        {label: "로 끝나지 않음", value: "NOT LIKE '%{0}'"},
     ]
 
-    const nodeState = useSelector((state: RootState) => state.node)
+    // const nodeState = useSelector((state: RootState) => state.node)
     const dispatch = useDispatch()
 
     const [operator, setOperator] = useState(operatorList[0]["value"])
@@ -36,7 +42,7 @@ export default function StringCompare({
             nodeSpec: {
                 component: StringCompare,
                 props: {table, groupId, nodeId, colName, colLabel},
-                queryString: `${colName} ${operator} '${value1}'`,
+                queryString: `${colName} ${stringFormat(operator, value1)}`,
             }
         }
         dispatch(NodeActions.setNode(payload))

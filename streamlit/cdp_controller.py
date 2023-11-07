@@ -18,17 +18,17 @@ logger.setLevel(logging.INFO)
 base_query = '''
     with bt as (
     select pr_mem_id, total_career_year, current_pay, edu_level, major, full_data_yn, m_want_job_stat, transfer_cnt, transfer_ratio 
-    from jk_dev_cdp_poc_db.cdp_base_table_ik_0830
+    from jk_dev_cdp_poc_db.cdp_jk_base_table
     ),
 
     wt as (
     select pr_mem_id, ordno, jobtype_name_c, biztype_name_c, workingmonths
-    from jk_dev_cdp_poc_db.cdp_working_table_ik_0830
+    from jk_dev_cdp_poc_db.cdp_jk_working_table
     ),
 
     at as (
     select pr_mem_id, sum(gno_view_cnt) as view_cnt, sum(apply_cnt) as apply_cnt, sum(scrap_cnt) as scrap_cnt
-    from jk_dev_cdp_poc_db.cdp_activity_table_ik_0830
+    from jk_dev_cdp_poc_db.cdp_jk_activity_table
     group by 1
     )
     
